@@ -1,7 +1,7 @@
 import functools
 import os
 #https://code.visualstudio.com/docs/python/tutorial-flask
-from . import db
+from .db import get_db, close_db
 from flask import (Flask, current_app, flash, g, make_response, redirect,
                    render_template, request, send_from_directory, session,
                    url_for)
@@ -22,7 +22,7 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        dba = db.get_db()
+        dba = get_db()
         g.user = dba.execute('SELECT * FROM Usuario WHERE Codigo = ?', (user_id,)).fetchone()
         
 def login_required(view):
@@ -58,10 +58,10 @@ def log():
                 error = 'Debe ingresar el número de documento'
                 flash(error, 'error')
                 return render_template('log.html')
-            dba = db.get_db()
+            dba = get_db()
             print('pas1')
             user = dba.execute("SELECT * FROM datospersonas WHERE user_id = ?", (numero_documento,)).fetchone()
-            dba = db.close_db()
+            dba = close_db()
             print('paso')
             print(user)
             if user is None:
@@ -100,10 +100,10 @@ def login():
                 error = 'Debes ingresar una contraseña'
                 flash(error)
                 return render_template('login.html')
-            dba = db.get_db()
+            dba = get_db()
 
             user = dba.execute("SELECT * FROM Usuarios WHERE user_id= ?", (userid,)).fetchone()
-            dba = db.close_db()
+            dba = close_db()
             print(user)
             if user is None:
                 error = 'Usuario o contraseña inválidos'

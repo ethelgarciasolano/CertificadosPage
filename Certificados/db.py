@@ -2,6 +2,7 @@ import sqlite3
 from sqlite3 import Error
 from flask import g
 
+
 def get_db():
     try:
         if 'db' not in g:
@@ -23,6 +24,7 @@ def get_db():
             cursor.execute("SELECT * FROM Usuarios;")
             print(cursor.fetchall())
         return gdb
+    
     except Error:
         print('error conexion')
         print(Error)
